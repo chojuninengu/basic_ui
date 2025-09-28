@@ -1,8 +1,8 @@
-import { Layout } from "@/components/Layout";
 import { Spinner } from "@/components/Spinner";
 import { api } from "@/utils/api";
-import type { NextPage } from "next";
+import { signOut } from "next-auth/react";
 import Link from "next/link";
+import type { NextPage } from "next";
 
 const CustomersPage: NextPage = () => {
 	const {
@@ -13,187 +13,114 @@ const CustomersPage: NextPage = () => {
 
 	if (isLoading) {
 		return (
-			<Layout>
+			<div className="flex h-screen items-center justify-center">
 				<Spinner />
-			</Layout>
+			</div>
 		);
 	}
 
 	if (error) {
-		return <Layout>Error: {error.message}</Layout>;
+		return <div className="flex h-screen items-center justify-center">Error: {error.message}</div>;
 	}
 
 	return (
-		<div className="relative flex h-auto min-h-screen w-full">
-			<aside className="flex w-64 flex-col border-black/10 border-r bg-white dark:border-white/10 dark:bg-background-dark">
-				<div className="flex h-16 items-center gap-4 px-6">
-					<div className="h-8 w-8 text-primary">
-						<svg
-							fill="none"
-							stroke="currentColor"
-							strokeLinecap="round"
-							strokeLinejoin="round"
-							strokeWidth="2"
-							viewBox="0 0 24 24"
-							xmlns="http://www.w3.org/2000/svg"
-						>
-							<title>LiteLLM Logo</title>
-							<path d="M12 2L2 7l10 5 10-5-10-5z" />
-							<path d="M2 17l10 5 10-5" />
-							<path d="M2 12l10 5 10-5" />
-						</svg>
-					</div>
-					<h2 className="font-bold text-black text-lg dark:text-white">
-						LiteClient
-					</h2>
-				</div>
-				<nav className="flex-1 space-y-2 p-4">
-					<Link
-						className="flex items-center gap-3 rounded-lg px-4 py-2 font-medium text-black/60 text-sm transition-colors hover:bg-black/5 dark:text-white/60 dark:hover:bg-white/5"
-						href="/"
-					>
-						<span className="material-symbols-outlined"> dashboard </span>
-						<span>Dashboard</span>
-					</Link>
-					<Link
-						className="flex items-center gap-3 rounded-lg bg-primary/10 px-4 py-2 font-medium text-primary text-sm"
-						href="/admin/customers"
-					>
-						<span className="material-symbols-outlined"> group </span>
-						<span>Customers</span>
-					</Link>
-					<Link
-						className="flex items-center gap-3 rounded-lg px-4 py-2 font-medium text-black/60 text-sm transition-colors hover:bg-black/5 dark:text-white/60 dark:hover:bg-white/5"
-						href="/admin/budgets/new"
-					>
-						<span className="material-symbols-outlined">
-							{" "}
-							account_balance_wallet{" "}
-						</span>
-						<span>Budgets</span>
-					</Link>
-					<Link
-						className="flex items-center gap-3 rounded-lg px-4 py-2 font-medium text-black/60 text-sm transition-colors hover:bg-black/5 dark:text-white/60 dark:hover:bg-white/5"
-						href="/"
-					>
-						<span className="material-symbols-outlined"> assessment </span>
-						<span>Reports</span>
-					</Link>
-					<Link
-						className="flex items-center gap-3 rounded-lg px-4 py-2 font-medium text-black/60 text-sm transition-colors hover:bg-black/5 dark:text-white/60 dark:hover:bg-white/5"
-						href="/"
-					>
-						<span className="material-symbols-outlined"> settings </span>
-						<span>Settings</span>
-					</Link>
-				</nav>
-				<div className="border-black/10 border-t p-4 dark:border-white/10">
-					<div className="flex items-center gap-3">
-						<div className="aspect-square w-10 overflow-hidden rounded-full">
-							<img
-								alt="User avatar"
-								className="h-full w-full object-cover"
-								src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqYwxDkHyvT8aBoP1K_HwH6lUsgKsMl9LFd9PEhDTKA5EQJQvvzLOmzwIbNABnhrYRpiMHz_GG6aZxDXHaAMg5u7uuK0MaAGjT9KH6pgSDytXQxc4OQ-ZzG0xtexkZoGpNsE7_6Al_ZiDQp5I0MgWk2UzYQUuBeYZQ9ohJ6-cHwIHJG9N7W7Vx0zQ1i0GJCMQWKvN0VT7q_ZzOyevgSc3aS4o9r5XdbVWxHia2J_rQW3aX5aUiFAY3TVOJbuRJDG70UG_B13VbvKU"
-							/>
-						</div>
-						<div>
-							<p className="font-medium text-black text-sm dark:text-white">
-								Admin User
-							</p>
-							<p className="text-black/60 text-xs dark:text-white/60">
-								admin@liteclient.com
-							</p>
-						</div>
-					</div>
-				</div>
-			</aside>
-			<main className="flex-1 bg-background-light p-8 dark:bg-background-dark/80">
-				<div className="mx-auto max-w-7xl">
-					<div className="mb-8">
-						<h1 className="font-bold text-3xl text-black tracking-tight dark:text-white">
-							Customers
-						</h1>
-						<p className="mt-2 text-black/60 text-sm dark:text-white/60">
-							Manage your customer base and their budgets.
-						</p>
-					</div>
-					<div className="space-y-6">
-						<div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-							<div className="relative flex-1">
-								<span className="material-symbols-outlined -translate-y-1/2 pointer-events-none absolute top-1/2 left-3 text-black/40 dark:text-white/40">
-									{" "}
-									search{" "}
-								</span>
-								<input
-									className="w-full rounded-lg border-black/10 bg-white py-2 pr-4 pl-10 text-black text-sm ring-primary/50 transition-all focus:border-primary focus:ring-2 dark:border-white/10 dark:bg-background-dark dark:text-white dark:focus:border-primary"
-									placeholder="Search customers"
-									type="search"
-								/>
-							</div>
-							<div className="flex items-center gap-2">
-								<button
-									type="button"
-									className="flex items-center gap-2 rounded-lg border border-black/10 bg-white px-4 py-2 font-medium text-black text-sm transition-colors hover:bg-black/5 dark:border-white/10 dark:bg-background-dark dark:text-white dark:hover:bg-white/5"
-								>
-									<span>Status</span>
-									<span className="material-symbols-outlined text-sm">
-										{" "}
-										expand_more{" "}
-									</span>
-								</button>
-								<button
-									type="button"
-									className="flex items-center gap-2 rounded-lg border border-black/10 bg-white px-4 py-2 font-medium text-black text-sm transition-colors hover:bg-black/5 dark:border-white/10 dark:bg-background-dark dark:text-white dark:hover:bg-white/5"
-								>
-									<span>Budget Range</span>
-									<span className="material-symbols-outlined text-sm">
-										{" "}
-										expand_more{" "}
-									</span>
-								</button>
-							</div>
-						</div>
-						<div className="overflow-x-auto rounded-lg border border-black/10 bg-white dark:border-white/10 dark:bg-background-dark">
-							<table className="min-w-full table-auto">
-								<thead className="border-black/10 border-b dark:border-white/10">
-									<tr>
-										<th className="px-6 py-3 text-left font-medium text-black/60 text-xs uppercase tracking-wider dark:text-white/60">
-											Name
-										</th>
-										<th className="px-6 py-3 text-left font-medium text-black/60 text-xs uppercase tracking-wider dark:text-white/60">
-											Email
-										</th>
-										<th className="px-6 py-3 text-left font-medium text-black/60 text-xs uppercase tracking-wider dark:text-white/60">
-											Current Budget
-										</th>
-									</tr>
-								</thead>
-								<tbody className="divide-y divide-black/10 dark:divide-white/10">
-									{customers?.map((customer) => (
-										<tr
-											key={customer.user_id}
-											className="cursor-pointer hover:bg-black/5 dark:hover:bg-white/5"
-										>
-											<td className="whitespace-nowrap px-6 py-4 font-medium text-black text-sm dark:text-white">
-												<Link href={`/admin/customers/${customer.user_id}`}>
-													{customer.user_id}
-												</Link>
-											</td>
-											<td className="whitespace-nowrap px-6 py-4 text-black/60 text-sm dark:text-white/60">
-												{customer.user_id}@email.com
-											</td>
-											<td className="whitespace-nowrap px-6 py-4 text-black/60 text-sm dark:text-white/60">
-												${customer.max_budget}
-											</td>
-										</tr>
-									))}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</main>
-		</div>
+    <div className="min-h-screen bg-background-light dark:bg-background-dark font-display">
+      <header className="sticky top-0 z-10 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-b border-slate-200 dark:border-slate-700">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center space-x-8">
+              <h1 className="text-xl font-bold text-slate-900 dark:text-white">LiteClient</h1>
+              <nav className="hidden md:flex items-center space-x-6">
+                <Link href="/" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">Dashboard</Link>
+                <Link href="/admin/customers" className="text-sm font-medium text-primary">Customers</Link>
+                <Link href="/admin/budgets" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">Budgets</Link>
+              </nav>
+            </div>
+            <div className="flex items-center space-x-4">
+              <button 
+                onClick={() => signOut()}
+                className="text-sm font-medium text-red-500 hover:text-red-600 transition-colors"
+              >
+                Sign Out
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+      <main className="flex-grow">
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+            <div>
+              <h2 className="text-3xl font-bold text-black dark:text-white">Customers</h2>
+              <p className="mt-1 text-black/60 dark:text-white/60">Manage and monitor your customer accounts</p>
+            </div>
+            <button className="mt-4 md:mt-0 flex items-center justify-center gap-2 px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors">
+              <span className="material-symbols-outlined text-base">add</span>
+              Add Customer
+            </button>
+          </div>
+          <div className="mb-6 space-y-4 md:space-y-0 md:flex md:items-center md:justify-between">
+            <div className="relative flex-1 md:max-w-xs">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <span className="material-symbols-outlined text-black/40 dark:text-white/40">search</span>
+              </div>
+              <input className="w-full pl-10 pr-4 py-2 border border-black/10 dark:border-white/10 bg-background-light dark:bg-background-dark rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition" placeholder="Search by name or email..." type="text"/>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <select className="appearance-none w-full md:w-auto bg-background-light dark:bg-background-dark border border-black/10 dark:border-white/10 rounded-lg py-2 pl-3 pr-8 text-sm focus:ring-2 focus:ring-primary focus:border-primary transition">
+                  <option>All Status</option>
+                  <option>Active</option>
+                  <option>Inactive</option>
+                </select>
+                <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                  <span className="material-symbols-outlined text-sm">expand_more</span>
+                </div>
+              </div>
+              <p className="text-sm text-black/60 dark:text-white/60">{customers?.length} customers found</p>
+            </div>
+          </div>
+          <div className="bg-transparent overflow-x-auto">
+            <table className="w-full text-sm text-left">
+              <thead className="text-xs text-black/60 dark:text-white/60 uppercase">
+                <tr>
+                  <th className="px-6 py-3" scope="col">Customer</th>
+                  <th className="px-6 py-3 hidden md:table-cell" scope="col">Email</th>
+                  <th className="px-6 py-3 hidden lg:table-cell" scope="col">Status</th>
+                  <th className="px-6 py-3 hidden lg:table-cell" scope="col">Created</th>
+                  <th className="px-6 py-3 text-right" scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {customers?.map((customer, index) => (
+                  <tr key={customer.user_id} className="border-b border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+                    <th className="px-6 py-4 font-medium whitespace-nowrap" scope="row">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center font-bold text-primary text-sm">
+                          {customer.user_id.substring(0, 2).toUpperCase()}
+                        </div>
+                        <div>
+                          <div className="text-base font-semibold text-black dark:text-white">Customer {index + 1}</div>
+                          <div className="font-normal text-black/60 dark:text-white/60">ID: {customer.user_id}</div>
+                        </div>
+                      </div>
+                    </th>
+                    <td className="px-6 py-4 hidden md:table-cell text-black/80 dark:text-white/80">customer{index + 1}@example.com</td>
+                    <td className="px-6 py-4 hidden lg:table-cell">
+                      <span className="px-2 py-1 text-xs font-medium rounded-full bg-green-500/20 text-green-400">Active</span>
+                    </td>
+                    <td className="px-6 py-4 hidden lg:table-cell text-black/80 dark:text-white/80">2023-01-15</td>
+                    <td className="px-6 py-4 text-right">
+                      <button className="font-medium text-primary hover:underline">View details</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
 	);
 };
 
