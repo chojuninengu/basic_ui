@@ -1,5 +1,7 @@
 import { Spinner } from "@/components/Spinner";
 import { api } from "@/utils/api";
+import { signOut } from "next-auth/react";
+import Link from "next/link";
 import type { NextPage } from "next";
 
 const CustomersPage: NextPage = () => {
@@ -22,22 +24,24 @@ const CustomersPage: NextPage = () => {
 	}
 
 	return (
-    <div className="flex flex-col min-h-screen">
-      <header className="sticky top-0 z-10 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm border-b border-white/10 dark:border-white/10">
+    <div className="min-h-screen bg-background-light dark:bg-background-dark font-display">
+      <header className="sticky top-0 z-10 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-b border-slate-200 dark:border-slate-700">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-8">
-              <h1 className="text-xl font-bold text-black dark:text-white">LiteLLM</h1>
+              <h1 className="text-xl font-bold text-slate-900 dark:text-white">LiteClient</h1>
               <nav className="hidden md:flex items-center space-x-6">
-                <a className="text-sm font-medium text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white transition-colors" href="#">Dashboard</a>
-                <a className="text-sm font-medium text-primary" href="#">Customers</a>
-                <a className="text-sm font-medium text-black/60 dark:text-white/60 hover:text-black dark:hover:text-white transition-colors" href="#">Admin</a>
+                <Link href="/" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">Dashboard</Link>
+                <Link href="/admin/customers" className="text-sm font-medium text-primary">Customers</Link>
+                <Link href="/admin/budgets" className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">Budgets</Link>
               </nav>
             </div>
             <div className="flex items-center space-x-4">
-              <button className="text-sm font-medium text-red-500 hover:text-red-600 transition-colors">Sign Out</button>
-              <button className="md:hidden flex items-center justify-center h-10 w-10 rounded-full bg-primary/20 text-primary">
-                <span className="material-symbols-outlined">menu</span>
+              <button 
+                onClick={() => signOut()}
+                className="text-sm font-medium text-red-500 hover:text-red-600 transition-colors"
+              >
+                Sign Out
               </button>
             </div>
           </div>
